@@ -13,6 +13,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using EF.Model;
 using Microsoft.EntityFrameworkCore;
+using LostAndFoundAppBackend.Repository;
 
 namespace LostAndFoundAppBackend
 {
@@ -40,6 +41,8 @@ namespace LostAndFoundAppBackend
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "LostAndFoundAppBackend", Version = "v1" });
             });
+
+            services.AddTransient<IAccountRepository, AccountRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

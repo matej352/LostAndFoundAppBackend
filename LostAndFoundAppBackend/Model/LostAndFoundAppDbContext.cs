@@ -25,16 +25,15 @@ namespace EF.Model
         public virtual DbSet<Item> Item { get; set; }
         public virtual DbSet<Message> Message { get; set; }
 
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("Relational:Collation", "Croatian_CI_AS");
 
             modelBuilder.Entity<Account>(entity =>
             {
-                entity.Property(e => e.AccountId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("accountId");
+                entity.Property(e => e.AccountId).HasColumnName("accountId");
+
+                entity.Property(e => e.Active).HasColumnName("active");
 
                 entity.Property(e => e.Email)
                     .IsRequired()
@@ -73,8 +72,6 @@ namespace EF.Model
 
             modelBuilder.Entity<Advertisement>(entity =>
             {
-                entity.Property(e => e.AdvertisementId).ValueGeneratedNever();
-
                 entity.Property(e => e.AccountId).HasColumnName("accountId");
 
                 entity.Property(e => e.Status).HasColumnName("status");
@@ -88,9 +85,7 @@ namespace EF.Model
 
             modelBuilder.Entity<Category>(entity =>
             {
-                entity.Property(e => e.CategoryId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("categoryId");
+                entity.Property(e => e.CategoryId).HasColumnName("categoryId");
 
                 entity.Property(e => e.ItemId).HasColumnName("itemId");
 
@@ -109,9 +104,7 @@ namespace EF.Model
 
             modelBuilder.Entity<Item>(entity =>
             {
-                entity.Property(e => e.ItemId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("itemId");
+                entity.Property(e => e.ItemId).HasColumnName("itemId");
 
                 entity.Property(e => e.Description)
                     .IsRequired()
@@ -147,9 +140,7 @@ namespace EF.Model
 
             modelBuilder.Entity<Message>(entity =>
             {
-                entity.Property(e => e.MessageId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("messageId");
+                entity.Property(e => e.MessageId).HasColumnName("messageId");
 
                 entity.Property(e => e.Content)
                     .IsRequired()

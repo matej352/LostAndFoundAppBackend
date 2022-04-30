@@ -15,12 +15,13 @@ namespace EF.Model
 
         public int AccountId { get; set; }
         public string Username { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public int PhoneNumber { get; set; }
         public string Password { get; set; }
         public string Email { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
         public int Role { get; set; }
+        public int Active { get; set; }
 
         public virtual ICollection<Advertisement> Advertisement { get; set; }
         public virtual ICollection<Message> Message { get; set; }
