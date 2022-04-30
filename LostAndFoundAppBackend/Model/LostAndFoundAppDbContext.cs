@@ -31,6 +31,9 @@ namespace EF.Model
 
             modelBuilder.Entity<Account>(entity =>
             {
+                entity.HasIndex(e => e.Username, "UQ__Account__F3DBC572A45A078C")
+                    .IsUnique();
+
                 entity.Property(e => e.AccountId).HasColumnName("accountId");
 
                 entity.Property(e => e.Active).HasColumnName("active");
@@ -55,9 +58,13 @@ namespace EF.Model
 
                 entity.Property(e => e.Password)
                     .IsRequired()
-                    .HasMaxLength(255)
-                    .IsUnicode(false)
+                    .HasMaxLength(500)
                     .HasColumnName("password");
+
+                entity.Property(e => e.PasswordHashSalt)
+                    .IsRequired()
+                    .HasMaxLength(500)
+                    .HasColumnName("passwordHashSalt");
 
                 entity.Property(e => e.PhoneNumber).HasColumnName("phoneNumber");
 
@@ -80,7 +87,7 @@ namespace EF.Model
                     .WithMany(p => p.Advertisement)
                     .HasForeignKey(d => d.AccountId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Advertise__accou__267ABA7A");
+                    .HasConstraintName("FK__Advertise__accou__276EDEB3");
             });
 
             modelBuilder.Entity<Category>(entity =>
@@ -99,7 +106,7 @@ namespace EF.Model
                     .WithMany(p => p.Category)
                     .HasForeignKey(d => d.ItemId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Category__itemId__2C3393D0");
+                    .HasConstraintName("FK__Category__itemId__2D27B809");
             });
 
             modelBuilder.Entity<Item>(entity =>
@@ -135,7 +142,7 @@ namespace EF.Model
                     .WithMany(p => p.Item)
                     .HasForeignKey(d => d.AdvertisementId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Item__Advertisem__29572725");
+                    .HasConstraintName("FK__Item__Advertisem__2A4B4B5E");
             });
 
             modelBuilder.Entity<Message>(entity =>
@@ -164,7 +171,7 @@ namespace EF.Model
                     .WithMany(p => p.Message)
                     .HasForeignKey(d => d.SenderAccountId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Message__senderA__2F10007B");
+                    .HasConstraintName("FK__Message__senderA__300424B4");
             });
 
             OnModelCreatingPartial(modelBuilder);

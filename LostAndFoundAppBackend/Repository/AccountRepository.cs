@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using EF.Model;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace LostAndFoundAppBackend.Repository
 {
@@ -35,13 +37,14 @@ namespace LostAndFoundAppBackend.Repository
         }
 
 
-        public async Task<int> save(CreateAccountDto acc)
+        public async Task<int> save(RegisterDto acc)
         {
             var newAccount = new Account
             {
                 Username = acc.Username,
                 PhoneNumber = acc.PhoneNumber,
                 Password = acc.Password,
+                PasswordHashSalt = acc.PasswordHashSalt,
                 Email = acc.Email,
                 FirstName = acc.FirstName,
                 LastName = acc.LastName,
@@ -56,9 +59,12 @@ namespace LostAndFoundAppBackend.Repository
         public async Task Update(UpdateAccountDto dto)
         {
             var acc = await context.Account.FindAsync(dto.AccountId);
+
+            var passwordHash = hashPassword(dto.Password, acc.PasswordHashSalt);
+
             acc.Username = dto.Username;
             acc.PhoneNumber = dto.PhoneNumber;
-            acc.Password = dto.Password;
+            acc.Password = passwordHash;
             acc.Email = dto.Email;
             acc.FirstName = dto.FirstName;
             acc.LastName = dto.LastName;
@@ -72,6 +78,17 @@ namespace LostAndFoundAppBackend.Repository
             context.Remove(acc);
 
             await context.SaveChangesAsync();
+        }
+
+
+
+        private byte[] hashPassword(string password, byte[] passwordSalt)
+        {
+            using (var hmac = new HMACSHA256(passwordSalt))
+            {
+                return hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
+                
+            }
         }
 
 

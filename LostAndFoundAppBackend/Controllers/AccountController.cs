@@ -8,6 +8,7 @@ using EF.Model;
 using LostAndFoundAppBackend.Repository;
 using LostAndFoundAppBackend.DTOs;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LostAndFoundAppBackend.Controllers
 {
@@ -27,8 +28,9 @@ namespace LostAndFoundAppBackend.Controllers
         /// Dohvaca sve korisnicke racune
         /// </summary>
         /// <returns></returns>
+        [Authorize(Roles = "Admin")]
         [HttpGet]
-        public async Task<IEnumerable<AccountDto>> GetAllTasks()
+        public async Task<IEnumerable<AccountDto>> GetAllAccounts()
         {
             var accounts = await repository.GetAll();
 
@@ -55,6 +57,7 @@ namespace LostAndFoundAppBackend.Controllers
         /// </summary>
         /// <param name="AccountId">Jednoznacan identifikator korisnickog racuna</param>
         /// <returns></returns>
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<AccountDto>> GetAccount(int id)
         {
@@ -68,6 +71,8 @@ namespace LostAndFoundAppBackend.Controllers
         }
 
 
+
+        /*
         /// <summary>
         /// Stvara novi korisnicki racun. Role je 0 (user), active je 1 (true)
         /// </summary>
@@ -81,7 +86,9 @@ namespace LostAndFoundAppBackend.Controllers
 
 
             return CreatedAtAction(nameof(GetAccount), new { id = acc_id }, accountInRepo.AsAccountDto());
-        }
+        } */
+
+
 
         /// <summary>
         /// Azurira podatke odgovarajuceg korisnickog racuna
@@ -90,6 +97,7 @@ namespace LostAndFoundAppBackend.Controllers
         /// <param name="updatedAccount">Podaci zadatka za ažuriranje</param>
         /// <returns></returns>
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<ActionResult> UpdateAccount(int id, UpdateAccountDto updatedAccount)
         {
             if (id != updatedAccount.AccountId)
@@ -112,8 +120,9 @@ namespace LostAndFoundAppBackend.Controllers
         /// </summary>
         /// <param name="id">Identifikator korisnickog racuna koji se brise</param>
         /// <returns></returns>
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteTask(int id)
+        public async Task<ActionResult> DeleteAccount(int id)
         {
             var task = await repository.findById(id);
             if (task.Value == null)

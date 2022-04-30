@@ -14,7 +14,7 @@ namespace LostAndFoundAppBackend.Repository
 
         public Task<ActionResult<Account>> findById(int id);
 
-        public Task<int> save(CreateAccountDto account);
+        public Task<int> save(RegisterDto account);
 
         public Task Update(UpdateAccountDto account);
 
