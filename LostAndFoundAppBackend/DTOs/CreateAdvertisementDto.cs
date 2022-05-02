@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace LostAndFoundAppBackend.DTOs
 {
-    public class LoginDto
+    public class CreateAdvertisementDto
     {
-        public string Username { get; set; }
-        public string Password { get; set; }
+        public int accountId { get; set; }
+
     }
 }

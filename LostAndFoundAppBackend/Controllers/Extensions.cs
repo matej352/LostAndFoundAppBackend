@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using EF.Model;
+﻿using EF.Model;
 using LostAndFoundAppBackend.DTOs;
 
 namespace LostAndFoundAppBackend.Controllers
@@ -25,6 +21,34 @@ namespace LostAndFoundAppBackend.Controllers
             };
 
         }
+
+        public static AdvertisementDto AsAdvertisementDto(this Advertisement adv)
+        {
+            return new AdvertisementDto
+            {
+                advertisementId = adv.AdvertisementId,
+                status = adv.Status,
+                accountId = adv.AccountId,
+                creationDate = adv.CreationDate,
+            };
+        }
+
+
+      
+        public static ItemDto AsItemDto(this Item item)
+        {
+            return new ItemDto
+            {
+                 itemId = item.ItemId,
+                 title = item.Title,
+                 description = item.Description,
+                 pictureUrl = item.PictureUrl,
+                 findingDate = (System.DateTime)item.FindingDate,
+                 lossDate = (System.DateTime)item.LossDate,
+                 AdvertisementId =item.AdvertisementId
+             };
+        }
+
 
 
     }

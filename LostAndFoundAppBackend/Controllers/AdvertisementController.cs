@@ -6,26 +6,28 @@ using LostAndFoundAppBackend.Repository;
 using LostAndFoundAppBackend.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
+using EF.Model;
 
 namespace LostAndFoundAppBackend.Controllers
 {
+    [Route("api/[controller]")]
     [ApiController]
-    [Route("[controller]")]
-    public class AccountController : ControllerBase
+    public class AdvertisementController : ControllerBase
     {
-       
-        private readonly IAccountRepository repository;
 
-        public AccountController(IAccountRepository repository)
+        private readonly IAdvertisementRepository repository;
+
+        public AdvertisementController(IAdvertisementRepository repository)
         {
             this.repository = repository;
         }
 
+        /*
         /// <summary>
         /// Dohvaca sve korisnicke racune
         /// </summary>
         /// <returns></returns>
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         [HttpGet]
         public async Task<IEnumerable<AccountDto>> GetAllAccounts()
         {
@@ -35,8 +37,8 @@ namespace LostAndFoundAppBackend.Controllers
             {
                 AccountId = acc.AccountId,
                 Username = acc.Username,
-                PhoneNumber = acc.PhoneNumber, 
-                Password = acc.Password, 
+                PhoneNumber = acc.PhoneNumber,
+                Password = acc.Password,
                 Email = acc.Email,
                 FirstName = acc.FirstName,
                 LastName = acc.LastName,
@@ -47,45 +49,57 @@ namespace LostAndFoundAppBackend.Controllers
             return dtos;
 
         }
-
+        */
 
         /// <summary>
-        /// Dohvaca odredeni korisnicki racun 
+        /// Dohvaca odredeni oglas
         /// </summary>
-        /// <param name="AccountId">Jednoznacan identifikator korisnickog racuna</param>
+        /// <param name="id">Jednoznacan identifikator oglasa</param>
         /// <returns></returns>
-        [Authorize]
+        
         [HttpGet("{id}")]
-        public async Task<ActionResult<AccountDto>> GetAccount(int id)
+        public async Task<ActionResult<AdvertisementDto>> GetAdvertisement(int id)
         {
-            var acc = await repository.findById(id);
-            if (acc.Value == null)
+            var adv = await repository.findAdvById(id);
+            if (adv.Value == null)
             {
                 return Problem(statusCode: StatusCodes.Status404NotFound, detail: $"Invalid id = {id}");
             }
-            return acc.Value.AsAccountDto();
+            return adv.Value.AsAdvertisementDto();
 
         }
 
 
 
-        /*
+
         /// <summary>
-        /// Stvara novi korisnicki racun. Role je 0 (user), active je 1 (true)
+        /// Stvara novi oglas. Status je 1 (aktivan)
         /// </summary>
-        /// <param name="newAccount">Podaci novog korisnickog racuna. Svi podaci su obavezni</param>
+        /// <param name="newAdv">Osnovne informacije oglasa</param>
         /// <returns></returns>
-        [HttpPost]
-        public async Task<ActionResult<AccountDto>> CreateAccount([FromBody] CreateAccountDto newAccount)
+        [HttpPost("{id}")]
+        public async Task<ActionResult<AdvertisementDto>> CreateAdvertisement(int id, CreateAdvertisementDto newAdv)
         {
-            int acc_id = await repository.save(newAccount);
-            Account accountInRepo = (await repository.findById(acc_id)).Value;
+            if (id != newAdv.accountId)
+            {
+                return Problem(statusCode: StatusCodes.Status400BadRequest, detail: $"Different ids {id} vs {newAdv.accountId}");
+            }
+            var accountInRepo = await repository.findAccById(id);
+            if (accountInRepo.Value == null)
+            {
+                return Problem(statusCode: StatusCodes.Status404NotFound, detail: $"Invalid id = {id}");
+            }
+
+            int newAdv_id = await repository.save(newAdv);
+
+            Advertisement advInRepo = (await repository.findAdvById(newAdv_id)).Value;
 
 
-            return CreatedAtAction(nameof(GetAccount), new { id = acc_id }, accountInRepo.AsAccountDto());
-        } */
+            return CreatedAtAction(nameof(GetAdvertisement), new { id = newAdv_id }, advInRepo.AsAdvertisementDto());
+        } 
 
 
+        /*
 
         /// <summary>
         /// Azurira podatke odgovarajuceg korisnickog racuna
@@ -101,7 +115,7 @@ namespace LostAndFoundAppBackend.Controllers
             {
                 return Problem(statusCode: StatusCodes.Status400BadRequest, detail: $"Different ids {id} vs {updatedAccount.AccountId}");
             }
-            var accountInRepo = await repository.findById(id);
+            var accountInRepo = await repository.findAccById(id);
             if (accountInRepo.Value == null)
             {
                 return Problem(statusCode: StatusCodes.Status404NotFound, detail: $"Invalid id = {id}");
@@ -121,7 +135,7 @@ namespace LostAndFoundAppBackend.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteAccount(int id)
         {
-            var task = await repository.findById(id);
+            var task = await repository.findAccById(id);
             if (task.Value == null)
             {
                 return Problem(statusCode: StatusCodes.Status404NotFound, detail: $"Invalid id = {id}");
@@ -134,6 +148,8 @@ namespace LostAndFoundAppBackend.Controllers
 
 
 
+
+        */
 
     }
 }

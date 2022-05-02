@@ -31,7 +31,7 @@ namespace EF.Model
 
             modelBuilder.Entity<Account>(entity =>
             {
-                entity.HasIndex(e => e.Username, "UQ__Account__F3DBC572A45A078C")
+                entity.HasIndex(e => e.Username, "UQ__Account__F3DBC572B148724D")
                     .IsUnique();
 
                 entity.Property(e => e.AccountId).HasColumnName("accountId");
@@ -80,6 +80,10 @@ namespace EF.Model
             modelBuilder.Entity<Advertisement>(entity =>
             {
                 entity.Property(e => e.AccountId).HasColumnName("accountId");
+
+                entity.Property(e => e.CreationDate)
+                    .HasColumnType("date")
+                    .HasColumnName("creationDate");
 
                 entity.Property(e => e.Status).HasColumnName("status");
 
