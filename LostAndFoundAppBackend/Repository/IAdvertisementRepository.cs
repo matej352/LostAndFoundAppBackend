@@ -13,7 +13,6 @@ namespace LostAndFoundAppBackend.Repository
         public Task<ActionResult<Advertisement>> findAdvById(int id);
 
         public Task<int> save(CreateAdvertisementDto adv);
-
-
+        public Task<List<AdvertisementWithItem>> GetAllActive();
     }
 }

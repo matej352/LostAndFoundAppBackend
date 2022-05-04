@@ -35,7 +35,30 @@ namespace LostAndFoundAppBackend.Repository
 
             return await Task.FromResult(adv);
         }
-
+       
+        public Task<List<AdvertisementWithItem>> GetAllActive()
+        {
+            var adsWithItems = context.Advertisement.Join(context.Item,
+                p => p.AdvertisementId,
+                e => e.AdvertisementId,
+                (p, e) => new AdvertisementWithItem { 
+                                status = p.Status,
+                                accountId = p.AccountId,
+                                advertisementId = p.AdvertisementId,
+                                creationDate = p.CreationDate,
+                                item = new ItemDto { 
+                                            itemId = e.ItemId,
+                                            title = e.Title,
+                                            description = e.Description,
+                                            pictureUrl = e.PictureUrl,
+                                            findingDate = (DateTime)e.FindingDate,
+                                            lossDate = (DateTime)e.LossDate,
+                                            AdvertisementId = e.AdvertisementId
+                                       }
+                          }
+                ).ToList();
+            return Task.FromResult(adsWithItems);
+        }
 
         public async Task<int> save(CreateAdvertisementDto adv)
         {
@@ -51,7 +74,6 @@ namespace LostAndFoundAppBackend.Repository
             return await Task.FromResult(savedAdv.AdvertisementId);
         }
 
-
-
+        
     }
 }

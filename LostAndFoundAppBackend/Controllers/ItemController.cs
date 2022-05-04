@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace LostAndFoundAppBackend.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class ItemController : ControllerBase
     {

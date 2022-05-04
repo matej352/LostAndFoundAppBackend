@@ -10,7 +10,7 @@ using EF.Model;
 
 namespace LostAndFoundAppBackend.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class AdvertisementController : ControllerBase
     {
@@ -22,41 +22,27 @@ namespace LostAndFoundAppBackend.Controllers
             this.repository = repository;
         }
 
-        /*
+        
         /// <summary>
-        /// Dohvaca sve korisnicke racune
+        /// Dohvaca sve aktivne oglase sa pripadnim predmetima
         /// </summary>
         /// <returns></returns>
-        [Authorize]
         [HttpGet]
-        public async Task<IEnumerable<AccountDto>> GetAllAccounts()
+        public async Task<IEnumerable<AdvertisementWithItem>> GetAllActiveAdvertisements()
         {
-            var accounts = await repository.GetAll();
+            var adsWithItems = await repository.GetAllActive();
 
-            var dtos = accounts.Select(acc => new AccountDto
-            {
-                AccountId = acc.AccountId,
-                Username = acc.Username,
-                PhoneNumber = acc.PhoneNumber,
-                Password = acc.Password,
-                Email = acc.Email,
-                FirstName = acc.FirstName,
-                LastName = acc.LastName,
-                Role = acc.Role,
-                Active = (int)acc.Active
-            });
-
-            return dtos;
+            return adsWithItems;
 
         }
-        */
+        
 
         /// <summary>
         /// Dohvaca odredeni oglas
         /// </summary>
         /// <param name="id">Jednoznacan identifikator oglasa</param>
         /// <returns></returns>
-        
+
         [HttpGet("{id}")]
         public async Task<ActionResult<AdvertisementDto>> GetAdvertisement(int id)
         {
