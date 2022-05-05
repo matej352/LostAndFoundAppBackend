@@ -7,10 +7,14 @@ namespace EF.Model
 {
     public partial class Category
     {
+        public Category()
+        {
+            Item = new HashSet<Item>();
+        }
+
         public int CategoryId { get; set; }
         public string Name { get; set; }
-        public int ItemId { get; set; }
 
-        public virtual Item Item { get; set; }
+        public virtual ICollection<Item> Item { get; set; }
     }
 }

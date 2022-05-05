@@ -31,9 +31,6 @@ namespace EF.Model
 
             modelBuilder.Entity<Account>(entity =>
             {
-                entity.HasIndex(e => e.Username, "UQ__Account__F3DBC572B148724D")
-                    .IsUnique();
-
                 entity.Property(e => e.AccountId).HasColumnName("accountId");
 
                 entity.Property(e => e.Active).HasColumnName("active");
@@ -81,9 +78,17 @@ namespace EF.Model
             {
                 entity.Property(e => e.AccountId).HasColumnName("accountId");
 
-                entity.Property(e => e.CreationDate)
+                entity.Property(e => e.ExpirationDate)
                     .HasColumnType("date")
-                    .HasColumnName("creationDate");
+                    .HasColumnName("expirationDate");
+
+                entity.Property(e => e.Found).HasColumnName("found");
+
+                entity.Property(e => e.Lost).HasColumnName("lost");
+
+                entity.Property(e => e.PublishDate)
+                    .HasColumnType("date")
+                    .HasColumnName("publishDate");
 
                 entity.Property(e => e.Status).HasColumnName("status");
 
@@ -91,31 +96,25 @@ namespace EF.Model
                     .WithMany(p => p.Advertisement)
                     .HasForeignKey(d => d.AccountId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Advertise__accou__276EDEB3");
+                    .HasConstraintName("FK__Advertise__accou__267ABA7A");
             });
 
             modelBuilder.Entity<Category>(entity =>
             {
                 entity.Property(e => e.CategoryId).HasColumnName("categoryId");
 
-                entity.Property(e => e.ItemId).HasColumnName("itemId");
-
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(255)
                     .IsUnicode(false)
                     .HasColumnName("name");
-
-                entity.HasOne(d => d.Item)
-                    .WithMany(p => p.Category)
-                    .HasForeignKey(d => d.ItemId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Category__itemId__2D27B809");
             });
 
             modelBuilder.Entity<Item>(entity =>
             {
                 entity.Property(e => e.ItemId).HasColumnName("itemId");
+
+                entity.Property(e => e.CategoryId).HasColumnName("categoryId");
 
                 entity.Property(e => e.Description)
                     .IsRequired()
@@ -146,12 +145,20 @@ namespace EF.Model
                     .WithMany(p => p.Item)
                     .HasForeignKey(d => d.AdvertisementId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Item__Advertisem__2A4B4B5E");
+                    .HasConstraintName("FK__Item__Advertisem__2E1BDC42");
+
+                entity.HasOne(d => d.Category)
+                    .WithMany(p => p.Item)
+                    .HasForeignKey(d => d.CategoryId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Item__categoryId__2F10007B");
             });
 
             modelBuilder.Entity<Message>(entity =>
             {
                 entity.Property(e => e.MessageId).HasColumnName("messageId");
+
+                entity.Property(e => e.AccountId).HasColumnName("accountId");
 
                 entity.Property(e => e.Content)
                     .IsRequired()
@@ -169,13 +176,11 @@ namespace EF.Model
                     .HasColumnType("datetime")
                     .HasColumnName("sendDateTime");
 
-                entity.Property(e => e.SenderAccountId).HasColumnName("senderAccountId");
-
-                entity.HasOne(d => d.SenderAccount)
+                entity.HasOne(d => d.Account)
                     .WithMany(p => p.Message)
-                    .HasForeignKey(d => d.SenderAccountId)
+                    .HasForeignKey(d => d.AccountId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Message__senderA__300424B4");
+                    .HasConstraintName("FK__Message__account__2B3F6F97");
             });
 
             OnModelCreatingPartial(modelBuilder);

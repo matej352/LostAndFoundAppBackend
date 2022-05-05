@@ -8,6 +8,7 @@ namespace LostAndFoundAppBackend.DTOs
     public class CreateAdvertisementDto
     {
         public int accountId { get; set; }
-
+        public int lost { get; set; }
+        public int found { get; set; }
     }
 }

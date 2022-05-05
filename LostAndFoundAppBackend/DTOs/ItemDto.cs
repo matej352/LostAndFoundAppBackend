@@ -15,6 +15,7 @@ namespace LostAndFoundAppBackend.DTOs
         public DateTime findingDate { get; set; }
         public DateTime lossDate { get; set; }
         public int AdvertisementId { get; set; }
+        public CategoryDto category { get; set; }
 
     }
 }

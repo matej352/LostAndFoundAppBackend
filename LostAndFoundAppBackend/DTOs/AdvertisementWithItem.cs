@@ -11,6 +11,9 @@ namespace LostAndFoundAppBackend.DTOs
         public int accountId { get; set; }
         public int advertisementId { get; set; }
         public DateTime creationDate { get; set; }
+        public DateTime expirationDate { get; set; }
         public ItemDto item { get; set; }
+        public int found { get; set; }
+        public int lost { get; set; }
     }
 }

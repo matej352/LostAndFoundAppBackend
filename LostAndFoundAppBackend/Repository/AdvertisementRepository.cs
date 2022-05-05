@@ -41,21 +41,33 @@ namespace LostAndFoundAppBackend.Repository
             var adsWithItems = context.Advertisement.Join(context.Item,
                 p => p.AdvertisementId,
                 e => e.AdvertisementId,
-                (p, e) => new AdvertisementWithItem { 
-                                status = p.Status,
-                                accountId = p.AccountId,
-                                advertisementId = p.AdvertisementId,
-                                creationDate = p.CreationDate,
-                                item = new ItemDto { 
-                                            itemId = e.ItemId,
-                                            title = e.Title,
-                                            description = e.Description,
-                                            pictureUrl = e.PictureUrl,
-                                            findingDate = (DateTime)e.FindingDate,
-                                            lossDate = (DateTime)e.LossDate,
-                                            AdvertisementId = e.AdvertisementId
-                                       }
-                          }
+                (p, e) => new AdvertisementWithItem {
+                    status = p.Status,
+                    accountId = p.AccountId,
+                    advertisementId = p.AdvertisementId,
+                    creationDate = p.PublishDate,
+                    expirationDate = p.ExpirationDate,
+                    found = (int)p.Found,
+                    lost = (int)p.Lost,
+
+                    item = new ItemDto {
+                        itemId = e.ItemId,
+                        title = e.Title,
+                        description = e.Description,
+                        pictureUrl = e.PictureUrl,
+                        findingDate = (DateTime)e.FindingDate,
+                        lossDate = (DateTime)e.LossDate,
+                        AdvertisementId = e.AdvertisementId,
+                        category = context.Item.Join(context.Category,
+                                            a => a.CategoryId,
+                                            b => b.CategoryId,
+                                            (a, b) => new CategoryDto
+                                            {
+                                                categoryId = b.CategoryId,
+                                                name = b.Name
+                                            }).FirstOrDefault()
+                    }
+                }
                 ).ToList();
             return Task.FromResult(adsWithItems);
         }
@@ -65,8 +77,11 @@ namespace LostAndFoundAppBackend.Repository
             Advertisement savedAdv = new Advertisement
             {
                 Status = 1,
-                CreationDate = DateTime.UtcNow,
+                PublishDate = DateTime.UtcNow,
+                ExpirationDate = DateTime.UtcNow.AddDays(30),
                 AccountId = adv.accountId,
+                Found = adv.found,
+                Lost = adv.lost,
             };
 
             context.Add(savedAdv);

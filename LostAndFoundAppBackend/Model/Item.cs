@@ -7,11 +7,6 @@ namespace EF.Model
 {
     public partial class Item
     {
-        public Item()
-        {
-            Category = new HashSet<Category>();
-        }
-
         public int ItemId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
@@ -19,8 +14,9 @@ namespace EF.Model
         public DateTime? FindingDate { get; set; }
         public DateTime? LossDate { get; set; }
         public int AdvertisementId { get; set; }
+        public int CategoryId { get; set; }
 
         public virtual Advertisement Advertisement { get; set; }
-        public virtual ICollection<Category> Category { get; set; }
+        public virtual Category Category { get; set; }
     }
 }

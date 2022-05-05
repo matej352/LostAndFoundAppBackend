@@ -14,8 +14,11 @@ namespace EF.Model
 
         public int AdvertisementId { get; set; }
         public int Status { get; set; }
+        public DateTime PublishDate { get; set; }
+        public DateTime ExpirationDate { get; set; }
+        public int? Found { get; set; }
+        public int? Lost { get; set; }
         public int AccountId { get; set; }
-        public DateTime CreationDate { get; set; }
 
         public virtual Account Account { get; set; }
         public virtual ICollection<Item> Item { get; set; }

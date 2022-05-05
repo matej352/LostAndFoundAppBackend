@@ -29,7 +29,7 @@ namespace LostAndFoundAppBackend.Controllers
                 advertisementId = adv.AdvertisementId,
                 status = adv.Status,
                 accountId = adv.AccountId,
-                creationDate = adv.CreationDate,
+                creationDate = adv.PublishDate,
             };
         }
 
