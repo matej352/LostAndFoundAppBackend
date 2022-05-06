@@ -105,7 +105,7 @@ namespace LostAndFoundAppBackend.Controllers
                     audience: configuration.GetSection("AppSettings:Audience").Value, 
                                                                                      
                     claims: claims,  
-                    expires: DateTime.Now.AddMinutes(5),
+                    expires: DateTime.Now.AddMinutes(30),
                     signingCredentials: signingCredentials
             );
 
