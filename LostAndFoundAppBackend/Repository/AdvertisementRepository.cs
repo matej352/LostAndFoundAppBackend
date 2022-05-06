@@ -38,37 +38,48 @@ namespace LostAndFoundAppBackend.Repository
        
         public Task<List<AdvertisementWithItem>> GetAllActive()
         {
-            var adsWithItems = context.Advertisement.Join(context.Item,
-                p => p.AdvertisementId,
-                e => e.AdvertisementId,
-                (p, e) => new AdvertisementWithItem {
-                    status = p.Status,
-                    accountId = p.AccountId,
-                    advertisementId = p.AdvertisementId,
-                    creationDate = p.PublishDate,
-                    expirationDate = p.ExpirationDate,
-                    found = (int)p.Found,
-                    lost = (int)p.Lost,
 
-                    item = new ItemDto {
-                        itemId = e.ItemId,
-                        title = e.Title,
-                        description = e.Description,
-                        pictureUrl = e.PictureUrl,
-                        findingDate = (DateTime)e.FindingDate,
-                        lossDate = (DateTime)e.LossDate,
-                        AdvertisementId = e.AdvertisementId,
-                        category = context.Item.Join(context.Category,
-                                            a => a.CategoryId,
-                                            b => b.CategoryId,
-                                            (a, b) => new CategoryDto
-                                            {
-                                                categoryId = b.CategoryId,
-                                                name = b.Name
-                                            }).FirstOrDefault()
-                    }
-                }
-                ).ToList();
+
+
+            var adsWithItems = context.Advertisement
+                                 .Join(
+                                        context.Item,
+                                         p => p.AdvertisementId,
+                                         e => e.AdvertisementId,
+                                         (p, e) => new { p, e }
+                                       ).Join(
+                                              context.Category,
+                                              a => a.e.CategoryId,
+                                              b => b.CategoryId,
+                         (a, b) => new AdvertisementWithItem
+                         {
+                            status = a.p.Status,
+                            accountId = a.p.AccountId,
+                            advertisementId = a.p.AdvertisementId,
+                            creationDate = a.p.PublishDate,
+                            expirationDate = a.p.ExpirationDate,
+                            found = (int)a.p.Found,
+                            lost = (int)a.p.Lost,
+
+                            item = new ItemDto
+                            {
+                                itemId = a.e.ItemId,
+                                title = a.e.Title,
+                                description = a.e.Description,
+                                pictureUrl = a.e.PictureUrl,
+                                findingDate = (DateTime)a.e.FindingDate,
+                                lossDate = (DateTime)a.e.LossDate,
+                                AdvertisementId = a.e.AdvertisementId,
+                                category = new CategoryDto
+                                {
+                                    categoryId = b.CategoryId,
+                                    name = b.Name
+                                }
+                            }
+                        }
+                    ).ToList();
+
+            
             return Task.FromResult(adsWithItems);
         }
 
