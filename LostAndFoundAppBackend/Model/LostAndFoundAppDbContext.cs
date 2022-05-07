@@ -22,6 +22,7 @@ namespace EF.Model
         public virtual DbSet<Account> Account { get; set; }
         public virtual DbSet<Advertisement> Advertisement { get; set; }
         public virtual DbSet<Category> Category { get; set; }
+        public virtual DbSet<Image> Image { get; set; }
         public virtual DbSet<Item> Item { get; set; }
         public virtual DbSet<Message> Message { get; set; }
 
@@ -55,12 +56,10 @@ namespace EF.Model
 
                 entity.Property(e => e.Password)
                     .IsRequired()
-                    .HasMaxLength(500)
                     .HasColumnName("password");
 
                 entity.Property(e => e.PasswordHashSalt)
                     .IsRequired()
-                    .HasMaxLength(500)
                     .HasColumnName("passwordHashSalt");
 
                 entity.Property(e => e.PhoneNumber).HasColumnName("phoneNumber");
@@ -110,6 +109,29 @@ namespace EF.Model
                     .HasColumnName("name");
             });
 
+            modelBuilder.Entity<Image>(entity =>
+            {
+                entity.Property(e => e.ImageId).HasColumnName("imageId");
+
+                entity.Property(e => e.Data)
+                    .IsRequired()
+                    .HasColumnName("data");
+
+                entity.Property(e => e.ItemId).HasColumnName("itemId");
+
+                entity.Property(e => e.Title)
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .IsUnicode(false)
+                    .HasColumnName("title");
+
+                entity.HasOne(d => d.Item)
+                    .WithMany(p => p.Image)
+                    .HasForeignKey(d => d.ItemId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Image__itemId__31EC6D26");
+            });
+
             modelBuilder.Entity<Item>(entity =>
             {
                 entity.Property(e => e.ItemId).HasColumnName("itemId");
@@ -129,11 +151,6 @@ namespace EF.Model
                 entity.Property(e => e.LossDate)
                     .HasColumnType("datetime")
                     .HasColumnName("lossDate");
-
-                entity.Property(e => e.PictureUrl)
-                    .HasMaxLength(1000)
-                    .IsUnicode(false)
-                    .HasColumnName("pictureUrl");
 
                 entity.Property(e => e.Title)
                     .IsRequired()

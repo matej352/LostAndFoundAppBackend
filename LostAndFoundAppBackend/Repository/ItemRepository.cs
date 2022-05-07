@@ -33,7 +33,7 @@ namespace LostAndFoundAppBackend.Repository
             {
                 Title = item.title,
                 Description = item.description,
-                PictureUrl = item.pictureUrl,
+                
                 FindingDate = DateTime.UtcNow,
                 LossDate = DateTime.UtcNow,
                 AdvertisementId = item.AdvertisementId,

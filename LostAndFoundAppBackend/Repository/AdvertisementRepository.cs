@@ -66,7 +66,7 @@ namespace LostAndFoundAppBackend.Repository
                                 itemId = a.e.ItemId,
                                 title = a.e.Title,
                                 description = a.e.Description,
-                                pictureUrl = a.e.PictureUrl,
+                               
                                 findingDate = (DateTime)a.e.FindingDate,
                                 lossDate = (DateTime)a.e.LossDate,
                                 AdvertisementId = a.e.AdvertisementId,

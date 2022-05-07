@@ -7,10 +7,14 @@ namespace EF.Model
 {
     public partial class Item
     {
+        public Item()
+        {
+            Image = new HashSet<Image>();
+        }
+
         public int ItemId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public string PictureUrl { get; set; }
         public DateTime? FindingDate { get; set; }
         public DateTime? LossDate { get; set; }
         public int AdvertisementId { get; set; }
@@ -18,5 +22,6 @@ namespace EF.Model
 
         public virtual Advertisement Advertisement { get; set; }
         public virtual Category Category { get; set; }
+        public virtual ICollection<Image> Image { get; set; }
     }
 }

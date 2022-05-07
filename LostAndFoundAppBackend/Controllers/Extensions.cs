@@ -42,7 +42,7 @@ namespace LostAndFoundAppBackend.Controllers
                  itemId = item.ItemId,
                  title = item.Title,
                  description = item.Description,
-                 pictureUrl = item.PictureUrl,
+              
                  findingDate = (System.DateTime)item.FindingDate,
                  lossDate = (System.DateTime)item.LossDate,
                  AdvertisementId =item.AdvertisementId
