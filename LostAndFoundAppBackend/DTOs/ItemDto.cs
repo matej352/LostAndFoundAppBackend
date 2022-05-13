@@ -16,5 +16,7 @@ namespace LostAndFoundAppBackend.DTOs
         public int AdvertisementId { get; set; }
         public CategoryDto category { get; set; }
 
+        public string imageData { get; set; }
+
     }
 }

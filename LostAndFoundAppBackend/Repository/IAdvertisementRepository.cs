@@ -14,5 +14,9 @@ namespace LostAndFoundAppBackend.Repository
 
         public Task<int> save(CreateAdvertisementDto adv);
         public Task<List<AdvertisementWithItem>> GetAllActive();
+
+        public Task<List<AdvertisementWithItem>> GetAllActive(int categoryId);
+
+        public Task<AdvertisementWithItem> GetAdvertisementWithItem(int id);
     }
 }

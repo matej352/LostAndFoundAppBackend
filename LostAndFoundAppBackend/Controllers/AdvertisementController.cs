@@ -35,7 +35,39 @@ namespace LostAndFoundAppBackend.Controllers
             return adsWithItems;
 
         }
-        
+
+
+        /// <summary>
+        /// Dohvaca sve aktivne oglase filtrirane prema kategoriji sa pripadnim predmetima
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetAdvertisementsCategoryFilter/{id}")]
+        public async Task<IEnumerable<AdvertisementWithItem>> GetAllActiveCategoryFilterAdvertisements(int id)
+        {
+            var adsWithItems = await repository.GetAllActive(id);
+
+            return adsWithItems;
+
+        }
+
+
+        /// <summary>
+        /// Dohvaca zeljeni oglas sa pripadnim predmetom
+        /// <param name="id">Jednoznacan identifikator oglasa</param>
+        /// </summary>
+        /// <returns></returns>
+        [Authorize]
+        [HttpGet]
+        [Route("GetAdvertisementWithItem/{id}")]
+        public async Task<AdvertisementWithItem> GetAdvertisementWithItem(int id)
+        {
+            var adWithItem = await repository.GetAdvertisementWithItem(id);
+
+            return adWithItem;
+
+        }
+
 
         /// <summary>
         /// Dohvaca odredeni oglas
@@ -43,6 +75,7 @@ namespace LostAndFoundAppBackend.Controllers
         /// <param name="id">Jednoznacan identifikator oglasa</param>
         /// <returns></returns>
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<AdvertisementDto>> GetAdvertisement(int id)
         {
