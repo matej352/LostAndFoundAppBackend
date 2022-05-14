@@ -52,12 +52,14 @@ namespace LostAndFoundAppBackend.Controllers
         /// <summary>
         /// Dohvaca odredeni korisnicki racun 
         /// </summary>
-        /// <param name="AccountId">Jednoznacan identifikator korisnickog racuna</param>
+        /// <param name="username">Jednoznacan username korisnickog racuna</param>
         /// <returns></returns>
         [Authorize]
-        [HttpGet("{id}")]
-        public async Task<ActionResult<AccountDto>> GetAccount(int id)
+        [HttpGet("{username}")]
+        public async Task<ActionResult<AccountDto>> GetAccount(string username)
         {
+            var id = await repository.getIdForUsername(username);
+
             var acc = await repository.findById(id);
             if (acc.Value == null)
             {

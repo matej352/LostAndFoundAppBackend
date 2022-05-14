@@ -5,6 +5,7 @@ using EF.Model;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography;
 using System.Text;
+using System.Linq;
 
 namespace LostAndFoundAppBackend.Repository
 {
@@ -34,6 +35,13 @@ namespace LostAndFoundAppBackend.Repository
             var acc = await context.Account.FindAsync(id);
 
             return await Task.FromResult(acc);
+        }
+
+        public async Task<int> getIdForUsername(string username)
+        {
+            var acc = context.Account.Where(acc => acc.Username == username).SingleOrDefault();
+
+            return await Task.FromResult(acc.AccountId);
         }
 
 
