@@ -36,6 +36,24 @@ namespace LostAndFoundAppBackend.Controllers
 
         }
 
+        /// <summary>
+        /// Dohvaca sve oglase odredenog korisnika sa pripadnim predmetima
+        /// <param name="username">Jedinstveno korisnicko ime korisnika</param>
+        /// </summary>
+        /// <returns></returns>
+        [Authorize]
+        [HttpGet]
+        [Route("GetAdvertisementsFromUser/{username}")]
+        public async Task<IEnumerable<AdvertisementWithItem>> GetAllAdvertisementsFromUser(string username)
+        {
+            var id = await repository.findIdByUsername(username);
+
+            var adsWithItems = await repository.GetAll(id.Value);
+
+            return adsWithItems;
+
+        }
+
 
         /// <summary>
         /// Dohvaca sve aktivne oglase filtrirane prema kategoriji sa pripadnim predmetima
@@ -115,7 +133,27 @@ namespace LostAndFoundAppBackend.Controllers
 
 
             return CreatedAtAction(nameof(GetAdvertisement), new { id = newAdv_id }, advInRepo.AsAdvertisementDto());
-        } 
+        }
+
+        /// <summary>
+        /// Promjena statusa izabranog oglasa
+        /// </summary>
+        /// <param name="advertisementId">Jedinstveni identifikator oglasa kojeg zelimo aktivirati/deaktivirati</param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpPut("{advertisementId}")]
+        public async Task<ActionResult> ChangeStatus(int advertisementId)
+        {
+            var adv = await repository.GetAdvertisementWithItem(advertisementId);
+
+            if (adv == null)
+            {
+                return Problem(statusCode: StatusCodes.Status400BadRequest, detail: $"Advertisement with id = {advertisementId} does not exist.");
+            }
+           
+            await repository.UpdateStatus(advertisementId);
+            return NoContent();
+        }
 
 
         /*
