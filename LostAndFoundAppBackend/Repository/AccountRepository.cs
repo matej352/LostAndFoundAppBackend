@@ -68,15 +68,15 @@ namespace LostAndFoundAppBackend.Repository
         {
             var acc = await context.Account.FindAsync(dto.AccountId);
 
-            var passwordHash = hashPassword(dto.Password, acc.PasswordHashSalt);
+            //var passwordHash = hashPassword(dto.Password, acc.PasswordHashSalt);
 
-            acc.Username = dto.Username;
+            //acc.Username = dto.Username;   username se ne može promijeniti
             acc.PhoneNumber = dto.PhoneNumber;
-            acc.Password = passwordHash;
+            //acc.Password = passwordHash;
             acc.Email = dto.Email;
             acc.FirstName = dto.FirstName;
             acc.LastName = dto.LastName;
-            acc.Active = dto.Active;
+            //acc.Active = dto.Active;
             await context.SaveChangesAsync();
         }
 

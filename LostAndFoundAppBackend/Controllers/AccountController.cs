@@ -92,13 +92,15 @@ namespace LostAndFoundAppBackend.Controllers
         /// <summary>
         /// Azurira podatke odgovarajuceg korisnickog racuna
         /// </summary>
-        /// <param name="id">Jedinstveni identifikator korisnickog racuna koji se zeli azurirati</param>
+        /// <param name="username">Jedinstveni username identifikator korisnickog racuna koji se zeli azurirati</param>
         /// <param name="updatedAccount">Podaci zadatka za ažuriranje</param>
         /// <returns></returns>
-        [HttpPut("{id}")]
         [Authorize]
-        public async Task<ActionResult> UpdateAccount(int id, UpdateAccountDto updatedAccount)
+        [HttpPut("{username}")]
+        public async Task<ActionResult> UpdateAccount(string username, UpdateAccountDto updatedAccount)
         {
+            var id = await repository.getIdForUsername(username);
+
             if (id != updatedAccount.AccountId)
             {
                 return Problem(statusCode: StatusCodes.Status400BadRequest, detail: $"Different ids {id} vs {updatedAccount.AccountId}");
