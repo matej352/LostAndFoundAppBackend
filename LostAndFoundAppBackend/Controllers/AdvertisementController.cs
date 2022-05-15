@@ -113,18 +113,22 @@ namespace LostAndFoundAppBackend.Controllers
         /// Stvara novi oglas. Status je 1 (aktivan)
         /// </summary>
         /// <param name="newAdv">Osnovne informacije oglasa</param>
+        /// <param name="username">Jedinstveno korisnicko ime korisnika koji stvara oglas</param>
         /// <returns></returns>
-        [HttpPost("{id}")]
-        public async Task<ActionResult<AdvertisementDto>> CreateAdvertisement(int id, CreateAdvertisementDto newAdv)
+        [Authorize]
+        [HttpPost("{username}")]
+        public async Task<ActionResult<AdvertisementDto>> CreateAdvertisement(string username, CreateAdvertisementDto newAdv)
         {
-            if (id != newAdv.accountId)
+           
+            if (username != newAdv.username)
             {
-                return Problem(statusCode: StatusCodes.Status400BadRequest, detail: $"Different ids {id} vs {newAdv.accountId}");
+                return Problem(statusCode: StatusCodes.Status400BadRequest, detail: $"Different usernames: {username} vs {newAdv.username}");
             }
-            var accountInRepo = await repository.findAccById(id);
+            var id = await repository.findIdByUsername(username);
+            var accountInRepo = await repository.findAccById(id.Value);
             if (accountInRepo.Value == null)
             {
-                return Problem(statusCode: StatusCodes.Status404NotFound, detail: $"Invalid id = {id}");
+                return Problem(statusCode: StatusCodes.Status404NotFound, detail: $"Invalid username = {username}");
             }
 
             int newAdv_id = await repository.save(newAdv);

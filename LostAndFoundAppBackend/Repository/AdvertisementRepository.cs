@@ -247,12 +247,14 @@ namespace LostAndFoundAppBackend.Repository
 
         public async Task<int> save(CreateAdvertisementDto adv)
         {
+            var id = await findIdByUsername(adv.username);
+
             Advertisement savedAdv = new Advertisement
             {
                 Status = 1,
                 PublishDate = DateTime.UtcNow,
                 ExpirationDate = DateTime.UtcNow.AddDays(30),
-                AccountId = adv.accountId,
+                AccountId = id.Value,
                 Found = adv.found,
                 Lost = adv.lost,
             };

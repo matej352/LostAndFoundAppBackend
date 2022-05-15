@@ -10,9 +10,8 @@ namespace LostAndFoundAppBackend.DTOs
 
         public string title { get; set; }
         public string description { get; set; }
-        public string pictureUrl { get; set; }
-        public DateTime findingDate { get; set; }
-        public DateTime lossDate { get; set; }
+        public DateTime? findingDate { get; set; }
+        public DateTime? lossDate { get; set; }
         public int AdvertisementId { get; set; }
         public int categoryId { get; set; }
 
