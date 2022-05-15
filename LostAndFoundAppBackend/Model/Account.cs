@@ -23,6 +23,7 @@ namespace EF.Model
         public string Email { get; set; }
         public int Role { get; set; }
         public int Active { get; set; }
+        public string ConnectionId { get; set; }
 
         public virtual ICollection<Advertisement> Advertisement { get; set; }
         public virtual ICollection<Message> Message { get; set; }

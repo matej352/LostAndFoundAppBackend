@@ -17,6 +17,9 @@ namespace LostAndFoundAppBackend.Repository
         public Task<int> save(RegisterDto account);
 
         public Task Update(UpdateAccountDto account);
+        public Task UpdateConnId(ConnectionIdDto dto, int accId);
+        public Task<string> GetConnId( int accId);
+
 
         public Task Delete(int id);
 

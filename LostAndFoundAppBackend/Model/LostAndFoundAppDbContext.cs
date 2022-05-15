@@ -36,6 +36,11 @@ namespace EF.Model
 
                 entity.Property(e => e.Active).HasColumnName("active");
 
+                entity.Property(e => e.ConnectionId)
+                    .HasMaxLength(100)
+                    .IsUnicode(false)
+                    .HasColumnName("connectionId");
+
                 entity.Property(e => e.Email)
                     .IsRequired()
                     .HasMaxLength(50)

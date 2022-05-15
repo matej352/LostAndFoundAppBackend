@@ -80,6 +80,22 @@ namespace LostAndFoundAppBackend.Repository
             await context.SaveChangesAsync();
         }
 
+        public async Task UpdateConnId(ConnectionIdDto dto, int accId)
+        {
+            var acc = await context.Account.FindAsync(accId);
+
+            acc.ConnectionId = dto.connId;
+            
+            await context.SaveChangesAsync();
+        }
+
+        public async Task<string> GetConnId(int accId)
+        {
+            var connId = context.Account.Where(a => a.AccountId == accId).Select(a => a.ConnectionId).SingleOrDefault();
+            return await Task.FromResult(connId);
+        }
+
+
         public async Task Delete(int id)
         {
             var acc = await context.Account.FindAsync(id);

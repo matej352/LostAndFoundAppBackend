@@ -70,6 +70,27 @@ namespace LostAndFoundAppBackend.Controllers
         }
 
 
+        /// <summary>
+        /// Dohvaca odredeni korisnicki racun 
+        /// </summary>
+        /// <param name="accId">Jednoznacan identifikator korisnickog racuna</param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpGet]
+        [Route("GetAccountById/{accId}")]
+        public async Task<ActionResult<AccountDto>> GetAccount(int accId)
+        {
+
+            var acc = await repository.findById(accId);
+            if (acc.Value == null)
+            {
+                return Problem(statusCode: StatusCodes.Status404NotFound, detail: $"Invalid id = {accId}");
+            }
+            return acc.Value.AsAccountDto();
+
+        }
+
+
 
         /*
         /// <summary>
@@ -112,6 +133,51 @@ namespace LostAndFoundAppBackend.Controllers
             }
             await repository.Update(updatedAccount);
             return NoContent();
+        }
+
+
+        /// <summary>
+        /// Azurira SignalR Connection id zeljenog korisnika
+        /// </summary>
+        /// <param name="username">Jedinstveni username identifikator korisnickog racuna kojem spremamo connection id</param>
+        /// <param name="dto">Objekt sa novim connection id-em</param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpPut]
+        [Route("SaveConnectionId/{username}")]
+        public async Task<ActionResult> SaveConnectionId(string username, ConnectionIdDto dto)
+        {
+            var id = await repository.getIdForUsername(username);
+
+            var accountInRepo = await repository.findById(id);
+            if (accountInRepo.Value == null)
+            {
+                return Problem(statusCode: StatusCodes.Status404NotFound, detail: $"User with id =  {id} does not exists.");
+            }
+            await repository.UpdateConnId(dto, id);
+            return NoContent();
+        }
+
+
+
+        /// <summary>
+        /// Dohvaca SignalR Connection id zeljenog korisnika
+        /// </summary>
+        /// <param name="accId">Jedinstveni username identifikator korisnickog racuna kojem dohvacamo connection id</param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpGet]
+        [Route("GetConnectionId/{accId}")]
+        public async Task<ActionResult<ConnectionIdDto>> GetConnectionId(int accId)
+        {
+           
+            var accountInRepo = await repository.findById(accId);
+            if (accountInRepo.Value == null)
+            {
+                return Problem(statusCode: StatusCodes.Status404NotFound, detail: $"User with id =  {accId} does not exists.");
+            }
+            var connId = await repository.GetConnId(accId);
+            return new ConnectionIdDto { connId = connId };
         }
 
 

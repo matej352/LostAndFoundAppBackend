@@ -17,6 +17,7 @@ using LostAndFoundAppBackend.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using LostAndFoundAppBackend.Hubs;
 
 namespace LostAndFoundAppBackend
 {
@@ -56,8 +57,11 @@ namespace LostAndFoundAppBackend
 
             services.AddCors(c =>
             {
-                c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+                c.AddPolicy("CorsPolicy", options => options.AllowCredentials().AllowAnyMethod().AllowAnyHeader()
+                       .WithOrigins("http://localhost:4200"));
             });
+
+            services.AddSignalR();
 
             services.AddDbContext<LostandfoundappdbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("lostAndFoundAppDb")));
 
@@ -83,7 +87,8 @@ namespace LostAndFoundAppBackend
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "LostAndFoundAppBackend v1"));
             }
 
-            app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            app.UseCors("CorsPolicy");
+
 
             app.UseHttpsRedirection();
 
@@ -96,6 +101,7 @@ namespace LostAndFoundAppBackend
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<ChatHub>("/chat");
             });
         }
     }
