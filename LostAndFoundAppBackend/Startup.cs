@@ -75,6 +75,7 @@ namespace LostAndFoundAppBackend
             services.AddTransient<IAdvertisementRepository, AdvertisementRepository>();
             services.AddTransient<IItemRepository, ItemRepository>();
             services.AddTransient<ICategoryRepository, CategoryRepository>();
+            services.AddTransient<IMessageRepository, MessageRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

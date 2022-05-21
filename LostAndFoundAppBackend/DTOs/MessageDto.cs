@@ -10,5 +10,6 @@ namespace LostAndFoundAppBackend.DTOs
          public string content { get; set; }
          public int recieverId { get; set; }
          public string From { get; set; }
+         //public DateTime SendDateTime { get; set; }
     }
 }
