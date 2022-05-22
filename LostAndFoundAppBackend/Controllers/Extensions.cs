@@ -43,8 +43,8 @@ namespace LostAndFoundAppBackend.Controllers
                  title = item.Title,
                  description = item.Description,
               
-                 findingDate = (System.DateTime)item.FindingDate,
-                 lossDate = (System.DateTime)item.LossDate,
+                 findingDate = (item.FindingDate != null ? item.FindingDate : null),
+                 lossDate = (item.LossDate != null ? item.LossDate : null),
                  AdvertisementId =item.AdvertisementId
              };
         }
