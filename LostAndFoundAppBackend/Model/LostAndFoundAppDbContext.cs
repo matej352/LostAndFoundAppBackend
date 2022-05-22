@@ -80,10 +80,12 @@ namespace EF.Model
 
             modelBuilder.Entity<Advertisement>(entity =>
             {
+                entity.Property(e => e.AdvertisementId).HasColumnName("advertisementId");
+
                 entity.Property(e => e.AccountId).HasColumnName("accountId");
 
                 entity.Property(e => e.ExpirationDate)
-                    .HasColumnType("date")
+                    .HasColumnType("datetime")
                     .HasColumnName("expirationDate");
 
                 entity.Property(e => e.Found).HasColumnName("found");
@@ -91,7 +93,7 @@ namespace EF.Model
                 entity.Property(e => e.Lost).HasColumnName("lost");
 
                 entity.Property(e => e.PublishDate)
-                    .HasColumnType("date")
+                    .HasColumnType("datetime")
                     .HasColumnName("publishDate");
 
                 entity.Property(e => e.Status).HasColumnName("status");
@@ -141,6 +143,8 @@ namespace EF.Model
             {
                 entity.Property(e => e.ItemId).HasColumnName("itemId");
 
+                entity.Property(e => e.AdvertisementId).HasColumnName("advertisementId");
+
                 entity.Property(e => e.CategoryId).HasColumnName("categoryId");
 
                 entity.Property(e => e.Description)
@@ -167,7 +171,7 @@ namespace EF.Model
                     .WithMany(p => p.Item)
                     .HasForeignKey(d => d.AdvertisementId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Item__Advertisem__2E1BDC42");
+                    .HasConstraintName("FK__Item__advertisem__2E1BDC42");
 
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.Item)
@@ -190,7 +194,9 @@ namespace EF.Model
 
                 entity.Property(e => e.IsRead).HasColumnName("isRead");
 
-                entity.Property(e => e.ReadDateTime).HasColumnType("datetime");
+                entity.Property(e => e.ReadDateTime)
+                    .HasColumnType("datetime")
+                    .HasColumnName("readDateTime");
 
                 entity.Property(e => e.RecieverId).HasColumnName("recieverId");
 

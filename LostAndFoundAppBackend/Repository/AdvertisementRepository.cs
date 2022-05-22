@@ -89,7 +89,7 @@ namespace LostAndFoundAppBackend.Repository
 
         public Task<List<AdvertisementWithItem>> GetAllActive()
         {
-            var adsWithItems = context.Advertisement.Where(a => a.Status == 1)
+            var adsWithItems = context.Advertisement.Where(a => a.Status == 1).OrderByDescending(a => a.PublishDate)
                                  .Join(
                                         context.Item,
                                          p => p.AdvertisementId,
@@ -135,7 +135,7 @@ namespace LostAndFoundAppBackend.Repository
 
         public Task<List<AdvertisementWithItem>> GetAll(int accountId)
         {
-            var adsWithItems = context.Advertisement.Where(a => a.AccountId == accountId)
+            var adsWithItems = context.Advertisement.Where(a => a.AccountId == accountId).OrderByDescending(a => a.PublishDate)
                                  .Join(
                                         context.Item,
                                          p => p.AdvertisementId,
@@ -202,7 +202,7 @@ namespace LostAndFoundAppBackend.Repository
         public Task<List<AdvertisementWithItem>> GetAllActive(int categoryId)
         {
 
-            var adsWithItems = context.Advertisement.Where(a => a.Status == 1)
+            var adsWithItems = context.Advertisement.Where(a => a.Status == 1).OrderByDescending(a => a.PublishDate)
                                  .Join(
                                         context.Item,
                                          p => p.AdvertisementId,
