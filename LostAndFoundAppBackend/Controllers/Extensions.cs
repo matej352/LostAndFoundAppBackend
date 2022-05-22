@@ -45,6 +45,8 @@ namespace LostAndFoundAppBackend.Controllers
               
                  findingDate = (item.FindingDate != null ? item.FindingDate : null),
                  lossDate = (item.LossDate != null ? item.LossDate : null),
+                 locationLat = (float?)(item.LocationLat != null ? item.LocationLat : null),
+                 locationLng = (float?)(item.LocationLng != null ? item.LocationLng : null),
                  AdvertisementId =item.AdvertisementId
              };
         }

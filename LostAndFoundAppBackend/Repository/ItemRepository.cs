@@ -33,7 +33,8 @@ namespace LostAndFoundAppBackend.Repository
             {
                 Title = item.title,
                 Description = item.description,
-                
+                LocationLat = item.locationLat,
+                LocationLng = item.locationLng,
                 FindingDate = item.findingDate,
                 LossDate = item.lossDate,
                 AdvertisementId = item.AdvertisementId,

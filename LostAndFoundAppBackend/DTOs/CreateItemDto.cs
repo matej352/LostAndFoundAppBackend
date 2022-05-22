@@ -12,6 +12,10 @@ namespace LostAndFoundAppBackend.DTOs
         public string description { get; set; }
         public DateTime? findingDate { get; set; }
         public DateTime? lossDate { get; set; }
+
+        public float? locationLat { get; set; }
+        public float? locationLng { get; set; }
+
         public int AdvertisementId { get; set; }
         public int categoryId { get; set; }
 

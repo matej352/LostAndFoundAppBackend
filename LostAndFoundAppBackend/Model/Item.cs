@@ -17,6 +17,8 @@ namespace EF.Model
         public string Description { get; set; }
         public DateTime? FindingDate { get; set; }
         public DateTime? LossDate { get; set; }
+        public double? LocationLat { get; set; }
+        public double? LocationLng { get; set; }
         public int AdvertisementId { get; set; }
         public int CategoryId { get; set; }
 

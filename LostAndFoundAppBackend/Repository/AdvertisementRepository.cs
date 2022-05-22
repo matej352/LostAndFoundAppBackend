@@ -70,7 +70,8 @@ namespace LostAndFoundAppBackend.Repository
                                  itemId = a.e.ItemId,
                                  title = a.e.Title,
                                  description = a.e.Description,
-
+                                 locationLng = (float?)a.e.LocationLng,
+                                 locationLat = (float?)a.e.LocationLat,
                                  findingDate = (DateTime)a.e.FindingDate,
                                  lossDate = (DateTime)a.e.LossDate,
                                  AdvertisementId = a.e.AdvertisementId,
@@ -114,7 +115,8 @@ namespace LostAndFoundAppBackend.Repository
                                 itemId = a.e.ItemId,
                                 title = a.e.Title,
                                 description = a.e.Description,
-                               
+                                locationLng = (float?)a.e.LocationLng,
+                                locationLat = (float?)a.e.LocationLat,
                                 findingDate = (DateTime)a.e.FindingDate,
                                 lossDate = (DateTime)a.e.LossDate,
                                 AdvertisementId = a.e.AdvertisementId,
@@ -160,7 +162,8 @@ namespace LostAndFoundAppBackend.Repository
                                  itemId = a.e.ItemId,
                                  title = a.e.Title,
                                  description = a.e.Description,
-
+                                 locationLng = (float?)a.e.LocationLng,
+                                 locationLat = (float?)a.e.LocationLat,
                                  findingDate = (DateTime)a.e.FindingDate,
                                  lossDate = (DateTime)a.e.LossDate,
                                  AdvertisementId = a.e.AdvertisementId,
@@ -227,7 +230,8 @@ namespace LostAndFoundAppBackend.Repository
                                  itemId = a.e.ItemId,
                                  title = a.e.Title,
                                  description = a.e.Description,
-                                 
+                                 locationLng = (float?)a.e.LocationLng,
+                                 locationLat = (float?)a.e.LocationLat,
                                  findingDate = (DateTime)a.e.FindingDate,
                                  lossDate = (DateTime)a.e.LossDate,
                                  AdvertisementId = a.e.AdvertisementId,

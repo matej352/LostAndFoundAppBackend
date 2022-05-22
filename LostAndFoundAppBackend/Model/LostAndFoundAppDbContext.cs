@@ -157,6 +157,10 @@ namespace EF.Model
                     .HasColumnType("datetime")
                     .HasColumnName("findingDate");
 
+                entity.Property(e => e.LocationLat).HasColumnName("locationLat");
+
+                entity.Property(e => e.LocationLng).HasColumnName("locationLng");
+
                 entity.Property(e => e.LossDate)
                     .HasColumnType("datetime")
                     .HasColumnName("lossDate");
