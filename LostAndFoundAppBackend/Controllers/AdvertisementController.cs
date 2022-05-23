@@ -28,9 +28,41 @@ namespace LostAndFoundAppBackend.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IEnumerable<AdvertisementWithItem>> GetAllActiveAdvertisements()
+        [Route("count")]
+        public async Task<int> GetAllActiveAdvertisementsCount()
         {
-            var adsWithItems = await repository.GetAllActive();
+            List<AdvertisementWithItem> adsWithItems = await repository.GetAllActive();
+
+            return adsWithItems.Count;
+
+        }
+
+        /// <summary>
+        /// Dohvaca sve aktivne oglase sa pripadnim predmetima
+        /// <param name="id">Id kategorije</param>
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("count/{id}")]
+        public async Task<int> GetAllActiveAdvertisementsCategoryFilterCount(int id)
+        {
+            List<AdvertisementWithItem> adsWithItems = await repository.GetAllActive(id);
+
+            return adsWithItems.Count;
+
+        }
+
+
+        /// <summary>
+        /// Dohvaca sve aktivne oglase sa pripadnim predmetima od indexa do indexa
+        /// <param name="query">Objekt sa pocetnim i zavrsnim indeksom oglasa kojeg dohvacamo</param>
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("getAll")]
+        public async Task<IEnumerable<AdvertisementWithItem>> GetAllActiveAdvertisements(QueryOptionsDto query)
+        {
+            var adsWithItems = await repository.GetAllActive(query);
 
             return adsWithItems;
 
@@ -56,14 +88,15 @@ namespace LostAndFoundAppBackend.Controllers
 
 
         /// <summary>
-        /// Dohvaca sve aktivne oglase filtrirane prema kategoriji sa pripadnim predmetima
+        /// Dohvaca sve aktivne oglase filtrirane prema kategoriji sa pripadnim predmetima od indexa do indexa
+        /// <param name="query">Objekt sa pocetnim i zavrsnim indeksom oglasa kojeg dohvacamo</param>
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
+        [HttpPost]
         [Route("GetAdvertisementsCategoryFilter/{id}")]
-        public async Task<IEnumerable<AdvertisementWithItem>> GetAllActiveCategoryFilterAdvertisements(int id)
+        public async Task<IEnumerable<AdvertisementWithItem>> GetAllActiveCategoryFilterAdvertisements(int id, QueryOptionsDto query)
         {
-            var adsWithItems = await repository.GetAllActive(id);
+            var adsWithItems = await repository.GetAllActive(id, query);
 
             return adsWithItems;
 
@@ -160,57 +193,7 @@ namespace LostAndFoundAppBackend.Controllers
         }
 
 
-        /*
-
-        /// <summary>
-        /// Azurira podatke odgovarajuceg korisnickog racuna
-        /// </summary>
-        /// <param name="id">Jedinstveni identifikator korisnickog racuna koji se zeli azurirati</param>
-        /// <param name="updatedAccount">Podaci zadatka za ažuriranje</param>
-        /// <returns></returns>
-        [HttpPut("{id}")]
-        [Authorize]
-        public async Task<ActionResult> UpdateAccount(int id, UpdateAccountDto updatedAccount)
-        {
-            if (id != updatedAccount.AccountId)
-            {
-                return Problem(statusCode: StatusCodes.Status400BadRequest, detail: $"Different ids {id} vs {updatedAccount.AccountId}");
-            }
-            var accountInRepo = await repository.findAccById(id);
-            if (accountInRepo.Value == null)
-            {
-                return Problem(statusCode: StatusCodes.Status404NotFound, detail: $"Invalid id = {id}");
-            }
-            await repository.Update(updatedAccount);
-            return NoContent();
-        }
-
-
-
-        /// <summary>
-        /// Brise korisnicki racun odreden s identifikatorom
-        /// </summary>
-        /// <param name="id">Identifikator korisnickog racuna koji se brise</param>
-        /// <returns></returns>
-        [Authorize(Roles = "Admin")]
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteAccount(int id)
-        {
-            var task = await repository.findAccById(id);
-            if (task.Value == null)
-            {
-                return Problem(statusCode: StatusCodes.Status404NotFound, detail: $"Invalid id = {id}");
-            }
-
-            await repository.Delete(id);
-
-            return NoContent();
-        }
-
-
-
-
-        */
+        
 
     }
 }
