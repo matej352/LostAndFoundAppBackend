@@ -20,11 +20,16 @@ namespace LostAndFoundAppBackend.Repository
         public Task<List<AdvertisementWithItem>> GetAllActive();
 
         public Task<List<AdvertisementWithItem>> GetAllActive(int categoryId);
-        public Task<List<AdvertisementWithItem>> GetAll(int id);
+        public Task<List<AdvertisementWithItem>> GetAll(int accountId);
+
+        public Task<List<AdvertisementWithItem>> GetAllInactive(int accountId);
+
 
         public Task<List<AdvertisementWithItem>> GetAllActive(int categoryId, QueryOptionsDto query);
 
         public Task<AdvertisementWithItem> GetAdvertisementWithItem(int id);
         public Task UpdateStatus(int advertisementId);
+
+        public Task<Advertisement> UpdateExpirationDate(int advertisementId);
     }
 }

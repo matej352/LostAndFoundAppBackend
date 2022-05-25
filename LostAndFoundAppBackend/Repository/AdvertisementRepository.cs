@@ -91,7 +91,8 @@ namespace LostAndFoundAppBackend.Repository
 
         public Task<List<AdvertisementWithItem>> GetAllActive()
         {
-            var adsWithItems = context.Advertisement.Where(a => a.Status == 1).OrderByDescending(a => a.PublishDate)
+            var adsWithItems = context.Advertisement.Where(a => a.Status == 1 && DateTime.Compare(DateTime.UtcNow, a.ExpirationDate) < 0)
+                                 .OrderByDescending(a => a.PublishDate)
                                  .Join(
                                         context.Item,
                                          p => p.AdvertisementId,
@@ -138,7 +139,8 @@ namespace LostAndFoundAppBackend.Repository
 
         public Task<List<AdvertisementWithItem>> GetAllActive(QueryOptionsDto query)
         {
-            var adsWithItems = context.Advertisement.Where(a => a.Status == 1).OrderByDescending(a => a.PublishDate)
+            var adsWithItems = context.Advertisement.Where(a => a.Status == 1 && DateTime.Compare(DateTime.UtcNow, a.ExpirationDate) < 0)
+                                 .OrderByDescending(a => a.PublishDate)
                                  .Skip(query.startIndex).Take(query.endIndex-query.startIndex)
                                  .Join(
                                         context.Item,
@@ -186,7 +188,56 @@ namespace LostAndFoundAppBackend.Repository
 
         public Task<List<AdvertisementWithItem>> GetAll(int accountId)
         {
-            var adsWithItems = context.Advertisement.Where(a => a.AccountId == accountId).OrderByDescending(a => a.PublishDate)
+            var adsWithItems = context.Advertisement.Where(a => a.AccountId == accountId && DateTime.Compare(DateTime.UtcNow, a.ExpirationDate) < 0)
+                                  .OrderByDescending(a => a.PublishDate)
+                                 .Join(
+                                        context.Item,
+                                         p => p.AdvertisementId,
+                                         e => e.AdvertisementId,
+                                         (p, e) => new { p, e }
+                                       ).Join(
+                                              context.Category,
+                                              a => a.e.CategoryId,
+                                              b => b.CategoryId,
+                         (a, b) => new AdvertisementWithItem
+                         {
+                             status = a.p.Status,
+                             accountId = a.p.AccountId,
+                             advertisementId = a.p.AdvertisementId,
+                             creationDate = a.p.PublishDate,
+                             expirationDate = a.p.ExpirationDate,
+                             found = (int)a.p.Found,
+                             lost = (int)a.p.Lost,
+
+                             item = new ItemDto
+                             {
+                                 itemId = a.e.ItemId,
+                                 title = a.e.Title,
+                                 description = a.e.Description,
+                                 locationLng = (float?)a.e.LocationLng,
+                                 locationLat = (float?)a.e.LocationLat,
+                                 findingDate = (DateTime)a.e.FindingDate,
+                                 lossDate = (DateTime)a.e.LossDate,
+                                 AdvertisementId = a.e.AdvertisementId,
+                                 category = new CategoryDto
+                                 {
+                                     categoryId = b.CategoryId,
+                                     name = b.Name
+                                 }
+                             }
+                         }
+                    ).ToList();
+
+            findImageOfItem(adsWithItems);
+
+
+            return Task.FromResult(adsWithItems);
+        }
+
+        public Task<List<AdvertisementWithItem>> GetAllInactive(int accountId)
+        {
+            var adsWithItems = context.Advertisement.Where(a => a.AccountId == accountId && DateTime.Compare(DateTime.UtcNow, a.ExpirationDate) > 0)
+                                  .OrderByDescending(a => a.PublishDate)
                                  .Join(
                                         context.Item,
                                          p => p.AdvertisementId,
@@ -254,7 +305,8 @@ namespace LostAndFoundAppBackend.Repository
         public Task<List<AdvertisementWithItem>> GetAllActive(int categoryId, QueryOptionsDto query)
         {
 
-            var adsWithItems = context.Advertisement.Where(a => a.Status == 1).OrderByDescending(a => a.PublishDate)
+            var adsWithItems = context.Advertisement.Where(a => a.Status == 1 && DateTime.Compare(DateTime.UtcNow, a.ExpirationDate) < 0)
+                                 .OrderByDescending(a => a.PublishDate)
                                  .Skip(query.startIndex).Take(query.endIndex - query.startIndex)
                                  .Join(
                                         context.Item,
@@ -294,7 +346,10 @@ namespace LostAndFoundAppBackend.Repository
                          }
                     ).ToList();
 
-            findImageOfItem(adsWithItems);
+            if (adsWithItems != null)
+            {
+                findImageOfItem(adsWithItems);
+            }
 
             return Task.FromResult(adsWithItems);
         }
@@ -302,8 +357,9 @@ namespace LostAndFoundAppBackend.Repository
 
         public Task<List<AdvertisementWithItem>> GetAllActive(int categoryId)
         {
-
-            var adsWithItems = context.Advertisement.Where(a => a.Status == 1).OrderByDescending(a => a.PublishDate)
+        
+            var adsWithItems = context.Advertisement.Where(a => a.Status == 1 && DateTime.Compare(DateTime.UtcNow, a.ExpirationDate) < 0)
+                                 .OrderByDescending(a => a.PublishDate)
                                  .Join(
                                         context.Item,
                                          p => p.AdvertisementId,
@@ -341,8 +397,9 @@ namespace LostAndFoundAppBackend.Repository
                              }
                          }
                     ).ToList();
-
-            findImageOfItem(adsWithItems);
+            if (adsWithItems != null) {
+                findImageOfItem(adsWithItems);
+            }
 
             return Task.FromResult(adsWithItems);
         }
@@ -364,6 +421,18 @@ namespace LostAndFoundAppBackend.Repository
             context.Add(savedAdv);
             await context.SaveChangesAsync();
             return await Task.FromResult(savedAdv.AdvertisementId);
+        }
+
+        public async Task<Advertisement> UpdateExpirationDate(int advertisementId)
+        {
+            var adv = context.Advertisement.Where(a => a.AdvertisementId == advertisementId).SingleOrDefault();
+
+           
+            adv.ExpirationDate = adv.ExpirationDate.AddDays(31);
+            adv.PublishDate = DateTime.UtcNow;
+
+            await context.SaveChangesAsync();
+            return await Task.FromResult(adv);
         }
 
         public async Task UpdateStatus(int advertisementId)

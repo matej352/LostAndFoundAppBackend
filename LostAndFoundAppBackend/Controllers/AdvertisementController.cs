@@ -88,6 +88,42 @@ namespace LostAndFoundAppBackend.Controllers
 
 
         /// <summary>
+        /// Dohvaca NEAKTIVNE oglase odredenog korisnika sa pripadnim predmetima
+        /// <param name="username">Jedinstveno korisnicko ime korisnika</param>
+        /// </summary>
+        /// <returns></returns>
+        [Authorize]
+        [HttpGet]
+        [Route("GetInactiveAdvertisementsFromUser/{username}")]
+        public async Task<IEnumerable<AdvertisementWithItem>> GetInactiveAdvertisementsFromUser(string username)
+        {
+            var id = await repository.findIdByUsername(username);
+
+            var adsWithItems = await repository.GetAllInactive(id.Value);
+
+            return adsWithItems;
+
+        }
+
+        /// <summary>
+        /// Produzuje aktivnost oglasa za 30 dana
+        /// <param name="advertidementId">Jedinstveni identifikator oglasa</param>
+        /// </summary>
+        /// <returns></returns>
+        [Authorize]
+        [HttpGet]
+        [Route("reactivate/{advertidementId}")]
+        public async Task<AdvertisementDto> UpdateAdvertisementExpirationDate(int advertidementId)
+        {
+          
+            var add = await repository.UpdateExpirationDate(advertidementId);
+
+            return add.AsAdvertisementDto();
+
+        }
+
+
+        /// <summary>
         /// Dohvaca sve aktivne oglase filtrirane prema kategoriji sa pripadnim predmetima od indexa do indexa
         /// <param name="query">Objekt sa pocetnim i zavrsnim indeksom oglasa kojeg dohvacamo</param>
         /// </summary>
