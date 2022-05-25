@@ -127,8 +127,8 @@ namespace LostAndFoundAppBackend.Controllers
         /// <returns></returns>
 
         [Authorize]
-        [HttpGet("{id}")]
-        public async Task<ActionResult<AdvertisementDto>> GetAdvertisement(int id)
+        [HttpGet]
+        public async Task<ActionResult<AdvertisementDto>> GetAdvertisement([FromQuery(Name = "param")] int id )
         {
             var adv = await repository.findAdvById(id);
             if (adv.Value == null)
