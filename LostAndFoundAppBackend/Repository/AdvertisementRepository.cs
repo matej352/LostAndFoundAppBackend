@@ -355,7 +355,7 @@ namespace LostAndFoundAppBackend.Repository
             {
                 Status = 1,
                 PublishDate = DateTime.UtcNow,
-                ExpirationDate = DateTime.UtcNow.AddDays(30),
+                ExpirationDate = DateTime.UtcNow.AddDays(31),
                 AccountId = id.Value,
                 Found = adv.found,
                 Lost = adv.lost,
