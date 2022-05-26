@@ -8,6 +8,8 @@ namespace LostAndFoundAppBackend.Repository
 {
     public interface IAccountRepository
     {
+        public Task<IEnumerable<Account>> GetAll(int startIndex, int endIndex);
+
         public Task<IEnumerable<Account>> GetAll();
 
         public Task<ActionResult<Account>> findById(int id);

@@ -27,9 +27,9 @@ namespace LostAndFoundAppBackend.Controllers
         /// <returns></returns>
         [Authorize(Roles = "Admin")]
         [HttpGet]
-        public async Task<IEnumerable<AccountDto>> GetAllAccounts()
+        public async Task<IEnumerable<AccountDto>> GetAllAccounts([FromQuery(Name = "start")] int startIndex, [FromQuery(Name = "end")] int endIndex)
         {
-            var accounts = await repository.GetAll();
+            var accounts = await repository.GetAll(startIndex, endIndex);
 
             var dtos = accounts.Select(acc => new AccountDto
             {
@@ -45,6 +45,35 @@ namespace LostAndFoundAppBackend.Controllers
             });
 
             return dtos;
+
+        }
+
+
+        /// <summary>
+        /// Dohvaca broj svih korisnickih racuna
+        /// </summary>
+        /// <returns></returns>
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        [Route("count")]
+        public async Task<int> GetAllAccountsCount()
+        {
+            var accounts = await repository.GetAll();
+
+            var dtos = accounts.Select(acc => new AccountDto
+            {
+                AccountId = acc.AccountId,
+                Username = acc.Username,
+                PhoneNumber = acc.PhoneNumber,
+                Password = acc.Password,
+                Email = acc.Email,
+                FirstName = acc.FirstName,
+                LastName = acc.LastName,
+                Role = acc.Role,
+                Active = (int)acc.Active
+            });
+
+            return dtos.Count();
 
         }
 

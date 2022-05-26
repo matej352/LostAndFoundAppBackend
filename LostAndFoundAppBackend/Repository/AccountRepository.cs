@@ -21,6 +21,14 @@ namespace LostAndFoundAppBackend.Repository
         }
 
 
+        public async Task<IEnumerable<Account>> GetAll(int startIndex, int endIndex)
+        {
+
+            var accounts = context.Account.Skip(startIndex).Take(endIndex - startIndex);
+
+            return await Task.FromResult(accounts);
+        }
+
         public async Task<IEnumerable<Account>> GetAll()
         {
 
@@ -76,7 +84,7 @@ namespace LostAndFoundAppBackend.Repository
             acc.Email = dto.Email;
             acc.FirstName = dto.FirstName;
             acc.LastName = dto.LastName;
-            //acc.Active = dto.Active;
+            acc.Active = dto.Active;
             await context.SaveChangesAsync();
         }
 
