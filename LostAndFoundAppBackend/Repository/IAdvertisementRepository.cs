@@ -16,6 +16,7 @@ namespace LostAndFoundAppBackend.Repository
 
         public Task<int> save(CreateAdvertisementDto adv);
         public Task<List<AdvertisementWithItem>> GetAllActive(QueryOptionsDto query);
+        public Task<List<AdvertisementWithItem>> GetAll(QueryOptionsDto query);
 
         public Task<List<AdvertisementWithItem>> GetAllActive();
 
@@ -30,6 +31,10 @@ namespace LostAndFoundAppBackend.Repository
         public Task<AdvertisementWithItem> GetAdvertisementWithItem(int id);
         public Task UpdateStatus(int advertisementId);
 
+
+        public Task<int> GetAllCount();
         public Task<Advertisement> UpdateExpirationDate(int advertisementId);
+
+        public Task Delete(int advId);
     }
 }

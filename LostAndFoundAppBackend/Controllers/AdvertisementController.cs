@@ -38,6 +38,21 @@ namespace LostAndFoundAppBackend.Controllers
         }
 
         /// <summary>
+        /// Dohvaca sve oglase (AKTIVNE I EXPIRED) sa pripadnim predmetima
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("allcount")]
+        public async Task<int> GetAllAdvertisementsCount()
+        {
+            var count = await repository.GetAllCount();
+
+            return count;
+
+        }
+
+
+        /// <summary>
         /// Dohvaca sve aktivne oglase sa pripadnim predmetima
         /// <param name="id">Id kategorije</param>
         /// </summary>
@@ -63,6 +78,21 @@ namespace LostAndFoundAppBackend.Controllers
         public async Task<IEnumerable<AdvertisementWithItem>> GetAllActiveAdvertisements(QueryOptionsDto query)
         {
             var adsWithItems = await repository.GetAllActive(query);
+
+            return adsWithItems;
+
+        }
+
+        /// <summary>
+        /// Dohvaca sve oglase (AKTIVNE I EXPIRED) sa pripadnim predmetima
+        /// </summary>
+        /// <returns></returns>
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        [Route("getAllAndExpired")]
+        public async Task<IEnumerable<AdvertisementWithItem>> GetAllActiveAdvertisementsAndExpired(QueryOptionsDto query)
+        {
+            var  adsWithItems = await repository.GetAll(query);
 
             return adsWithItems;
 
@@ -229,7 +259,27 @@ namespace LostAndFoundAppBackend.Controllers
         }
 
 
-        
+        /// <summary>
+        /// Brise oglas (i pripadne mu objekte: item, image) odreden s identifikatorom
+        /// </summary>
+        /// <param name="advId">Identifikator oglasa koji se brise</param>
+        /// <returns></returns>
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteTask(int id)
+        {
+            var task = await repository.findAdvById(id);
+            if (task.Equals(null))
+            {
+                return Problem(statusCode: StatusCodes.Status404NotFound, detail: $"Invalid id = {id}");
+            }
+
+            await repository.Delete(id);
+
+            return NoContent();
+        }
+
+
 
     }
 }

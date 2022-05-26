@@ -43,6 +43,12 @@ namespace LostAndFoundAppBackend.Repository
             return await Task.FromResult(adv);
         }
 
+        public Task<int> GetAllCount() 
+        {
+            return Task.FromResult(context.Advertisement.Count());
+
+        }
+
         public Task<AdvertisementWithItem> GetAdvertisementWithItem(int id)
         {
             var adWithItem = context.Advertisement.Where(a => a.AdvertisementId == id)
@@ -178,6 +184,56 @@ namespace LostAndFoundAppBackend.Repository
                                 }
                             }
                         }
+                    ).ToList();
+
+            findImageOfItem(adsWithItems);
+
+
+            return Task.FromResult(adsWithItems);
+        }
+
+
+        public Task<List<AdvertisementWithItem>> GetAll(QueryOptionsDto query)
+        {
+            var adsWithItems = context.Advertisement
+                                 .OrderByDescending(a => a.PublishDate)
+                                 .Skip(query.startIndex).Take(query.endIndex - query.startIndex)
+                                 .Join(
+                                        context.Item,
+                                         p => p.AdvertisementId,
+                                         e => e.AdvertisementId,
+                                         (p, e) => new { p, e }
+                                       ).Join(
+                                              context.Category,
+                                              a => a.e.CategoryId,
+                                              b => b.CategoryId,
+                         (a, b) => new AdvertisementWithItem
+                         {
+                             status = a.p.Status,
+                             accountId = a.p.AccountId,
+                             advertisementId = a.p.AdvertisementId,
+                             creationDate = a.p.PublishDate,
+                             expirationDate = a.p.ExpirationDate,
+                             found = (int)a.p.Found,
+                             lost = (int)a.p.Lost,
+
+                             item = new ItemDto
+                             {
+                                 itemId = a.e.ItemId,
+                                 title = a.e.Title,
+                                 description = a.e.Description,
+                                 locationLng = (float?)a.e.LocationLng,
+                                 locationLat = (float?)a.e.LocationLat,
+                                 findingDate = (DateTime)a.e.FindingDate,
+                                 lossDate = (DateTime)a.e.LossDate,
+                                 AdvertisementId = a.e.AdvertisementId,
+                                 category = new CategoryDto
+                                 {
+                                     categoryId = b.CategoryId,
+                                     name = b.Name
+                                 }
+                             }
+                         }
                     ).ToList();
 
             findImageOfItem(adsWithItems);
@@ -450,6 +506,27 @@ namespace LostAndFoundAppBackend.Repository
             await context.SaveChangesAsync();
         }
 
+        public async Task Delete(int advId)
+        {
+
+            Advertisement advertisement = context.Advertisement.Where(a => a.AdvertisementId == advId).SingleOrDefault();
+
+            Item item = context.Item.Where(i => i.AdvertisementId == advId).SingleOrDefault();
+
+            Image image = context.Image.Where(i => i.ItemId == item.ItemId).SingleOrDefault();
+            if (image != null) {
+                context.Remove(image);
+            }
+           
+            context.Remove(item);
+            context.Remove(advertisement);
+
+
+            await context.SaveChangesAsync();
+        }
+
 
     }
+
+ 
 }
