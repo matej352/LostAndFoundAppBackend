@@ -85,6 +85,11 @@ namespace LostAndFoundAppBackend.Controllers
                 return BadRequest("Incorrect username or password!");
             }
 
+            if (user.Active == 0)
+            {
+                return BadRequest("Your account has been disabled from page administrator!");
+            }
+
             //GENERATE JWT
 
             var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetSection("AppSettings:TokenKey").Value));
