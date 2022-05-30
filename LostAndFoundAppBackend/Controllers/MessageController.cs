@@ -43,8 +43,6 @@ namespace LostAndFoundAppBackend.Controllers
                 recieverId = message.RecieverId,
                 accountId = message.AccountId,
                 sendDateTime = message.SendDateTime,
-                ReadDateTime = message.ReadDateTime,
-                isRead = message.IsRead
 
             });
 
@@ -91,9 +89,7 @@ namespace LostAndFoundAppBackend.Controllers
                 content = message.Content,
                 recieverId = message.RecieverId,
                 accountId = message.AccountId,
-                sendDateTime = message.SendDateTime,
-                ReadDateTime = message.ReadDateTime,
-                isRead = message.IsRead
+                sendDateTime = message.SendDateTime   
 
             });
 

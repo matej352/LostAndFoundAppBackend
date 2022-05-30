@@ -196,12 +196,6 @@ namespace EF.Model
                     .IsUnicode(false)
                     .HasColumnName("content");
 
-                entity.Property(e => e.IsRead).HasColumnName("isRead");
-
-                entity.Property(e => e.ReadDateTime)
-                    .HasColumnType("datetime")
-                    .HasColumnName("readDateTime");
-
                 entity.Property(e => e.RecieverId).HasColumnName("recieverId");
 
                 entity.Property(e => e.SendDateTime)

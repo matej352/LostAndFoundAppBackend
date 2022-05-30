@@ -67,8 +67,6 @@ namespace LostAndFoundAppBackend.Hubs
                     Content = mess.content,
                     RecieverId = mess.recieverId,
                     SendDateTime = DateTime.UtcNow,
-                    IsRead = 0,
-                    ReadDateTime = null,
                     AccountId = accountId
 
             };

@@ -65,8 +65,6 @@ namespace LostAndFoundAppBackend.Repository
                     recieverId = lastMessage.RecieverId,
                     accountId = lastMessage.AccountId,
                     sendDateTime = lastMessage.SendDateTime,
-                    ReadDateTime = lastMessage.ReadDateTime,
-                    isRead = lastMessage.IsRead
 
                 };
 

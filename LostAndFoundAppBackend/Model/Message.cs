@@ -11,8 +11,6 @@ namespace EF.Model
         public string Content { get; set; }
         public int RecieverId { get; set; }
         public DateTime SendDateTime { get; set; }
-        public int IsRead { get; set; }
-        public DateTime? ReadDateTime { get; set; }
         public int AccountId { get; set; }
 
         public virtual Account Account { get; set; }

@@ -13,8 +13,7 @@ namespace LostAndFoundAppBackend.DTOs
         public int recieverId { get; set; }
         public int accountId { get; set; }
         public DateTime sendDateTime { get; set; }
-        public DateTime? ReadDateTime { get; set; }
-        public int isRead { get; set; }
+     
 
     }
 }
